@@ -1,111 +1,162 @@
-<h1 style="text-align: center">Police Tenant Verification Portal<br /><br /></h1>
-<form role="form">
-	<!-- <div class="container">
-		<label style="text-align: center" for="aadharNo">Aadhar Number </label>
-		<input style="text-align: center" type="text" class="form-control" id="aadharNo"
-			placeholder="Enter Your Aadhar Number" />
-	</div> -->
-	<p></p>
-	<div>
-		<div id="object1" style="text-align: center;">
-			<video width="320" height="240" autoplay id="video" #video></video>
-			<canvas width="320" height="240" id="canvas" #canvas></canvas>
-			<!-- <img src="https://miro.medium.com/max/1050/1*ZGWXMiqjVcnuRXdytvgwmA.png" class="center" /> -->
-		</div>
-		<div class="center1" id="object2" style="display: none">
-			<div class="spinner-border"></div>
-		</div>
-	</div>
-</form>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="container" id="button">
-	<button id="start-camera" (click)="startCamera()">Start Camera </button>
-	<button id="click-photo" (click)="clickPhoto()">Click Photo </button>
-	<p></p>
-	<label><b>Upload Aadhaar Card</b>
-		<input style="padding-left: 50px;" type="file" id="Aadhaar" name="filename" accept="application/pdf">
-	</label>
-	<br>
-	<!-- <p><b>Upload Photo </b>
-		<input style="padding-left: 100px;" accept="image/*" type="file" id="userProvidedPhoto" name="userProvidedPhoto"
-			(change)="setUserProvidedPhoto($event)" #userProvidedPhoto>
-	</p> -->
-	<button id="myButton" (click)="openURL();stopCamera();">Proceed</button>
-</div>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Police Tenant Verification Portal</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    #object1 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+    }
 
-<div id="data" class="container" style="display: none">
-	<table style="max-width:100%" id="displaytable">
-		<tr>
-			<th> Particulars</th>
-			<th> Digilocker Data</th>
-			<th> Details read from Aadhaar card</th>
-			<th> Verifcation Result</th>
-		</tr>
-		<tr>
-			<th>Tenant Photo</th>
-			<th>
-				<img src="https://persist.signzy.tech/api/files/256208965/download/532908199c354224af70bf190a35907315b26a684e454216997bda698250a3c7.jpeg"
-					#displayUserDigilockerPhoto />
-			</th>
-			<th>
-				<img [src]="userProvidedPhotoSRC" id="displayUserProvidedPhoto" height="200"
-					#displayUserProvidedPhoto />
-			</th>
-			<th style="color: green; font-size: 40px;"> 91%</th>
-		</tr>
+    #object1 video {
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      background-image: url("https://www.creativefabrica.com/wp-content/uploads/2020/04/23/Camera-Icon-Graphics-3939285-1-580x435.jpg");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
 
-		<tr *ngFor="let user of userDetails.keys()">
-			<th>{{ user }}</th>
-			<th>{{ userDetails.get(user) }}</th>
-			<th>{{ userDetails.get(user) }}</th>
-			<th style="color: green"> Matched</th>
-		</tr>
-		<tr>
-			<th>Criminal Record Status from CCTNS/NCRB/ICJS</th>
-			<th></th>
-			<th></th>
-			<th style="color: green"> Clean</th>
-		</tr>
-	</table>
-	<div style="text-align: center;" id="mapholder"></div>
-	<!-- <h1 style="text-align: center"><br /><br />Travel History</h1>
-	<table style="max-width:100%" id="displaytable">
-		<tr>
-			<th> NAME</th>
-			<th> Date</th>
-			<th> Location</th>
-			<th> Nearest Police Station</th>
-		</tr>
-		<tr>
-			<th> ANSHUL KUMAR</th>
-			<th> 1 APRIL 2022</th>
-			<th> 28.8265,78.2337</th>
-			<th> Powai Police Station, Mumbai, MH</th>
-		</tr>
-		<tr>
-			<th> ANSHUL KUMAR</th>
-			<th> 10 APRIL 2022</th>
-			<th> 28.9255,78.6327</th>
-			<th> Mulund Police Station, Mumbai, MH</th>
-		</tr>
-		<tr>
-			<th> ANSHUL KUMAR</th>
-			<th> 14 APRIL 2022</th>
-			<th> 28.7275,78.1307</th>
-			<th> Parkville Police Station, Mumbai, MH</th>
-		</tr>
-		<tr>
-			<th> ANSHUL KUMAR</th>
-			<th> 18 APRIL 2022</th>
-			<th> 28.9695,78.3387</th>
-			<th> Kanjurmarg Police Station, Mumbai, MH</th>
-		</tr>
-		<tr>
-			<th> ANSHUL KUMAR</th>
-			<th> 24 APRIL 2022</th>
-			<th> 28.6232,78.1317</th>
-			<th> Dadar Police Station, Mumbai, MH</th>
-		</tr>
+    #object1 canvas {
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: white;
+      background-image: url("https://cdn-icons-png.flaticon.com/512/4042/4042171.png");
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-100">
+
+  <nav class="bg-white p-4 rounded-4xl text-center fixed w-full top-0">
+    <span class="text-black font-bold text-lg">Police Tenant Verification Portal </span>
+  </nav>
+
+
+
+
+    <p></p>
+    <div class="container mx-auto">
+      <div id="object1" class=" flex-row">
+        <video width="320" class="m-2 h-64" autoplay id="video" #video></video>
+        <canvas width="320" height="255" id="canvas" #canvas></canvas>
+      </div>
+      <div class="center1" id="object2" style="display: none">
+        <div class="spinner-border"></div>
+      </div>
+    </div>
+
+
+  <div class="container mx-auto my-8">
+    <button class="bg-blue-500 m-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="start-camera"
+      (click)="startCamera()">Start Camera</button>
+    <button class="bg-blue-500 m-2 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="click-photo"
+      (click)="clickPhoto()">Click Photo</button>
+
+    <div class="container mx-auto mt-4 p-8 bg-white shadow-lg rounded-lg max-w-md">
+      <div class="mb-4">
+        <label class="block text-gray-700 font-bold mb-2">Upload Aadhaar Card</label>
+        <div class="relative">
+          <input
+            class="appearance-none border border-gray-300 rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline"
+            type="file" id="Aadhaar" name="filename">
+          <span class="ml-3 absolute inset-y-0 right-0 flex items-center">
+            <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" id="myButton"
+              (click)="openURL();stopCamera();">Proceed</button>
+          </span>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div id="data" class="container" style="display: none">
+    <table style="max-width:100%" id="displaytable">
+      <tr>
+        <th> Particulars</th>
+        <th> Digilocker Data</th>
+        <th> Details read from Aadhaar card</th>
+        <th> Verifcation Result</th>
+      </tr>
+      <tr>
+        <th>Tenant Photo</th>
+        <th>
+          <img src="https://persist.signzy.tech/api/files/256208965/download/532908199c354224af70bf190a35907315b26a684e454216997bda698250a3c7.jpeg"
+            #displayUserDigilockerPhoto />
+        </th>
+        <th>
+          <img [src]="userProvidedPhotoSRC" id="displayUserProvidedPhoto" height="200"
+            #displayUserProvidedPhoto />
+        </th>
+        <th style="color: green; font-size: 40px;"> 91%</th>
+      </tr>
+
+      <tr *ngFor="let user of userDetails.keys()">
+        <th>{{ user }}</th>
+        <th>{{ userDetails.get(user) }}</th>
+        <th>{{ userDetails.get(user) }}</th>
+        <th style="color: green"> Matched</th>
+      </tr>
+      <tr>
+        <th>Criminal Record Status from CCTNS/NCRB/ICJS</th>
+        <th></th>
+        <th></th>
+        <th style="color: green"> Clean</th>
+      </tr>
+    </table>
+    <div style="text-align: center;" id="mapholder"></div>
+    <!-- <h1 style="text-align: center"><br /><br />Travel History</h1>
+    <table style="max-width:100%" id="displaytable">
+      <tr>
+        <th> NAME</th>
+        <th> Date</th>
+        <th> Location</th>
+        <th> Nearest Police Station</th>
+      </tr>
+      <tr>
+        <th> ANSHUL KUMAR</th>
+        <th> 1 APRIL 2022</th>
+        <th> 28.8265,78.2337</th>
+        <th> Powai Police Station, Mumbai, MH</th>
+      </tr>
+      <tr>
+        <th> ANSHUL KUMAR</th>
+        <th> 10 APRIL 2022</th>
+        <th> 28.9255,78.6327</th>
+        <th> Mulund Police Station, Mumbai, MH</th>
+      </tr>
+      <tr>
+        <th> ANSHUL KUMAR</th>
+        <th> 14 APRIL 2022</th>
+        <th> 28.7275,78.1307</th>
+        <th> Parkville Police Station, Mumbai, MH</th>
+      </tr>
+      <tr>
+        <th> ANSHUL KUMAR</th>
+        <th> 18 APRIL 2022</th>
+        <th> 28.9695,78.3387</th>
+        <th> Kanjurmarg Police Station, Mumbai, MH</th>
+      </tr>
+      <tr>
+        <th> ANSHUL KUMAR</th>
+        <th> 24 APRIL 2022</th>
+        <th> 28.6232,78.1317</th>
+        <th> Dadar Police Station, Mumbai, MH</th>
+      </tr>
 
 	</table> -->
 	<h1 style="color: green">Crime Check Verification Report</h1>
